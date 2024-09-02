@@ -15,8 +15,7 @@ public class UssdCallbackImpl implements IUssdCallback {
             response += "1. Account Number \n";
             response += "2. Phone Number";
         } else if (callbackDto.getText().equals("1")) {
-            response = "END Choose account information you want to view \n";
-            response += "Account Number: " + "8077938947\n";
+            response = "END Account Number: " + "8077938947\n";
             response += "Account Balance: " + "NGN2,066,961.00";
         } else if (callbackDto.getText().equals("2")) {
             response = "END Phone Number: " + callbackDto.getPhoneNumber();
