@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.dev.h3nry</groupId>
-    <artifactId>paycraft</artifactId>
+    <artifactId>PayCraft-Backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>paycraft</name>
     <description>paycraft</description>
