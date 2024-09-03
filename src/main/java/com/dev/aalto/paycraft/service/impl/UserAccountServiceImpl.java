@@ -17,6 +17,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
     public void createUserAccount(UserAccountDto request) {
         UserAccount userAccount = UserAccountMapper.maptoUserAccount(new UserAccount(), request);
         verifyRecord(userAccount);
+        createAccount(userAccount, request.getPassword());
         userAccountRepository.save(userAccount);
     }
 
@@ -30,5 +31,9 @@ public class UserAccountServiceImpl implements IUserAccountService {
             throw new UserAccountAlreadyExists("UserAccount already registered with this email address : "
                     + userAccount.getEmailAddress());
         }
+    }
+
+    private void createAccount(UserAccount userAccount, String password){
+        userAccount.setPassword(password + "weuihwoei"); //todo: encrypt password
     }
 }

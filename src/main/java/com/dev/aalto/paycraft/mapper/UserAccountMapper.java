@@ -12,6 +12,7 @@ public class UserAccountMapper {
         userAccountDto.setJobTitle(userAccount.getJobTitle());
         userAccountDto.setIndustryType(userAccount.getIndustryType());
         userAccountDto.setCompanySize(userAccount.getCompanySize());
+        userAccountDto.setPhoneNumber(userAccount.getPhoneNumber());
         userAccountDto.setOfficeAddress(userAccount.getOfficeAddress());
         return userAccountDto;
     }
@@ -24,6 +25,7 @@ public class UserAccountMapper {
         userAccount.setJobTitle(userAccountDto.getJobTitle());
         userAccount.setIndustryType(userAccountDto.getIndustryType());
         userAccount.setCompanySize(userAccountDto.getCompanySize());
+        userAccount.setPhoneNumber(userAccountDto.getPhoneNumber());
         userAccount.setOfficeAddress(userAccountDto.getOfficeAddress());
         return userAccount;
     }

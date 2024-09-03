@@ -19,5 +19,5 @@ public class UserAccount extends BaseEntity{
     private String jobTitle;
     private String industryType;
     private String password;
-    private Integer companySize;
+    private String companySize;
 }

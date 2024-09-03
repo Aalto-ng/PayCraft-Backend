@@ -2,30 +2,31 @@ package com.dev.aalto.paycraft.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
 @Data
 public class UserAccountDto {
-    @NotEmpty(message = "company name cannot be null or empty")
+    @NotEmpty(message = "Company name cannot be null or empty")
     private String companyName;
 
     @Size(min = 3, max = 100)
-    @NotEmpty(message = "first name cannot be null or empty")
+    @NotEmpty(message = "First name cannot be null or empty")
     private String firstName;
 
     @Size(min = 3, max = 100)
-    @NotEmpty(message = "last name cannot be null or empty")
+    @NotEmpty(message = "Last name cannot be null or empty")
     private String lastName;
 
-    @Email(message = "email address format is invalid")
+    @Email(message = "Email address format is invalid")
     @NotEmpty(message = "email address cannot be null or empty")
     private String emailAddress;
 
-    @NotEmpty(message = "Mobile number cannot be null or empty")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+    @NotEmpty(message = "Phone number cannot be null or empty")
+    @Pattern(regexp = "(^$|[0-9]{13})", message = "Phone number must be 13 digits")
     private String phoneNumber;
 
     @Size(min = 3, max = 100)
-    @NotEmpty(message = "Last name cannot be null or empty")
+    @NotEmpty(message = "Office address cannot be null or empty")
     private String officeAddress;
 
     @Size(min = 3, max = 100)
@@ -44,7 +45,7 @@ public class UserAccountDto {
     )
     private String password;
 
-    @Size(min = 3, max = 100)
+    @Range(min = 1, message = "Company size must be greater than one")
     @NotEmpty(message = "Company size cannot be null or empty")
-    private Integer companySize;
+    private String companySize;
 }
