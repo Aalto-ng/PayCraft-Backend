@@ -1,15 +1,14 @@
-package com.dev.aalto.paycraft.ussd.api;
-import com.dev.aalto.paycraft.ussd.dto.CallbackDto;
-import com.dev.aalto.paycraft.ussd.services.IUssdCallback;
+package com.dev.aalto.paycraft.api;
+
+import com.dev.aalto.paycraft.dto.UssdDto;
+import com.dev.aalto.paycraft.service.IUssdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-
-@RestController
-@RequestMapping("/api/v1")
+@RestController @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UssdController {
-    private final IUssdCallback iUssdCallback;
+    private final IUssdService iUssdService;
 
     @RequestMapping(value = "/ussd", method = {RequestMethod.POST, RequestMethod.GET})
     public String ussdCallback(
@@ -18,13 +17,6 @@ public class UssdController {
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
             @RequestParam(value = "text", required = false) String text) {
 
-        return iUssdCallback.ussdCallback(
-                CallbackDto.builder()
-                .sessionId(sessionId)
-                .serviceCode(serviceCode)
-                .phoneNumber(phoneNumber)
-                .text(text)
-                .build()
-        );
+        return iUssdService.ussdCallback(new UssdDto(sessionId, serviceCode, phoneNumber, text));
     }
 }
