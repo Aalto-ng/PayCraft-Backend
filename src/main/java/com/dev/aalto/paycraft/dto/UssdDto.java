@@ -2,7 +2,9 @@ package com.dev.aalto.paycraft.dto;
 
 import lombok.*;
 
-@Data @AllArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UssdDto {
     private String sessionId;
     private String serviceCode;

@@ -19,22 +19,23 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
 
     @Override
     public void createUserAccount(CreateAccountDto request) {
-
         UserAccount userAccount = UserAccountMapper.maptoUserAccount(new UserAccount(), extractUserAccount(request));
         verifyRecord(userAccount);
         createAccount(userAccount, request.getPassword());
+        /* create user account during onboarding */
         userAccountRepository.save(userAccount);
+        /* create company account during onboarding */
         companyAccountRepository.save(extractCompanyAccount(request, userAccount));
     }
 
     private void verifyRecord(UserAccount userAccount){
         if(userAccountRepository.findByPhoneNumber(userAccount.getPhoneNumber()).isPresent()){
-            throw new UserAccountAlreadyExists("UserAccount already registered with this phone number : "
+            throw new UserAccountAlreadyExists("Account already registered with this phone number : "
                     + userAccount.getPhoneNumber());
         }
 
         if(userAccountRepository.findByEmailAddress(userAccount.getEmailAddress()).isPresent()){
-            throw new UserAccountAlreadyExists("UserAccount already registered with this email address : "
+            throw new UserAccountAlreadyExists("Account already registered with this email address : "
                     + userAccount.getEmailAddress());
         }
     }
@@ -45,6 +46,7 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
         userAccount.setLastName(createAccountDto.getLastName());
         userAccount.setEmailAddress(createAccountDto.getEmailAddress());
         userAccount.setPhoneNumber(createAccountDto.getPhoneNumber());
+        userAccount.setJobTitle(createAccountDto.getJobTitle());
         return userAccount;
     }
 

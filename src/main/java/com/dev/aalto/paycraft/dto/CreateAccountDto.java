@@ -1,14 +1,14 @@
 package com.dev.aalto.paycraft.dto;
 
+import com.dev.aalto.paycraft.dto.enumeration.CompanySize;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateAccountDto {
-    @NotEmpty(message = "Company name cannot be null or empty")
-    private String companyName;
-
+    //UserAccount
     @Size(min = 3, max = 100)
     @NotEmpty(message = "First name cannot be null or empty")
     private String firstName;
@@ -18,7 +18,7 @@ public class CreateAccountDto {
     private String lastName;
 
     @Email(message = "Email address format is invalid")
-    @NotEmpty(message = "email address cannot be null or empty")
+    @NotEmpty(message = "Email address cannot be null or empty")
     private String emailAddress;
 
     @NotEmpty(message = "Phone number cannot be null or empty")
@@ -26,16 +26,8 @@ public class CreateAccountDto {
     private String phoneNumber;
 
     @Size(min = 3, max = 100)
-    @NotEmpty(message = "Office address cannot be null or empty")
-    private String officeAddress;
-
-    @Size(min = 3, max = 100)
     @NotEmpty(message = "Job title cannot be null or empty")
     private String jobTitle;
-
-    @Size(min = 3, max = 100)
-    @NotEmpty(message = "Industry type cannot be null or empty")
-    private String industryType;
 
     @NotEmpty(message = "Password cannot be null or empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
@@ -45,7 +37,17 @@ public class CreateAccountDto {
     )
     private String password;
 
-    @Range(min = 1, message = "Company size must be greater than one")
-    @NotEmpty(message = "Company size cannot be null or empty")
-    private String companySize;
+    //CompanyAccount
+    @NotEmpty(message = "Company name cannot be null or empty")
+    private String companyName;
+
+    @NotNull(message = "Company size cannot be null or empty")
+    private CompanySize companySize;
+
+    @NotEmpty(message = "Industry type cannot be null or empty")
+    private String industryType;
+
+    @Size(min = 3, max = 100)
+    @NotEmpty(message = "Office address cannot be null or empty")
+    private String officeAddress;
 }

@@ -1,12 +1,12 @@
 package com.dev.aalto.paycraft.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
+import lombok.*;
 
-@Data @AllArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ErrorResponseDto {
     private String apiPath;
     private HttpStatus errorCode;

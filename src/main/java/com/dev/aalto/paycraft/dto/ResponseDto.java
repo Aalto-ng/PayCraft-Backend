@@ -1,9 +1,10 @@
 package com.dev.aalto.paycraft.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data @AllArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseDto {
     private String statusCode;
     private String statusMsg;

@@ -14,7 +14,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @MappedSuperclass /* Informs JPA that this is a super entity that will be extended by other entities. */
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 @EntityListeners(AuditingEntityListener.class) /* basically to handle @ModifiedBy */
 public class BaseEntity {
     @CreatedDate

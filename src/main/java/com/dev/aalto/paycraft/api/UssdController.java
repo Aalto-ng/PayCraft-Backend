@@ -5,7 +5,8 @@ import com.dev.aalto.paycraft.service.IUssdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@RestController @RequestMapping("/api/v1")
+@RestController
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UssdController {
     private final IUssdService iUssdService;
@@ -16,7 +17,6 @@ public class UssdController {
             @RequestParam(value = "serviceCode", required = false) String serviceCode,
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
             @RequestParam(value = "text", required = false) String text) {
-
         return iUssdService.ussdCallback(new UssdDto(sessionId, serviceCode, phoneNumber, text));
     }
 }
