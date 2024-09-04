@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 @Data
-public class UserAccountDto {
+public class CreateAccountDto {
     @NotEmpty(message = "Company name cannot be null or empty")
     private String companyName;
 
