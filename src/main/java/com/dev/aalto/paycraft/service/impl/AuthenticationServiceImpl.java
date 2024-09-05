@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static com.dev.aalto.paycraft.constant.PayCraftConstant.*;
@@ -84,7 +85,49 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public DefaultApiResponse<AuthorisationResponseDto> refreshToken(RefreshTokenRequestDto requestBody) {
-        return null;
+        log.info("Processing Refreshing Token Request for user.");
+        DefaultApiResponse<AuthorisationResponseDto> response = new DefaultApiResponse<>();
+
+        try {
+            String userEmail = jwtService.extractUsername(requestBody.refreshToken());
+            log.info("Email of the Refresh Token: {}", userEmail);
+
+            log.info("Checking if Refresh token has expired.");
+            if(jwtService.isTokenExpired(requestBody.refreshToken())){
+                response.setStatusCode(STATUS_400);
+                response.setStatusMessage("Refresh Token Expired: User needs to Log in Again");
+                log.warn("Refresh Token has expired for user {}: {}", userEmail, requestBody.refreshToken());
+                return response;
+            }
+
+            Optional<UserAccount> existingUserAccount = userRepository.findByEmailAddress(userEmail);
+            if(existingUserAccount.isPresent()){
+                UserAccount user = existingUserAccount.get();
+
+                log.info("Verifying Token is valid and properly signed for user {}.", userEmail);
+                if(jwtService.isTokenValid(requestBody.refreshToken(), user)){
+                    log.info("Generating New Token for user {}.", userEmail);
+
+                    String newAccessToken = jwtService.createJWT(user);
+                    String newRefreshToken = jwtService.generateRefreshToken(generateRefreshTokenClaims(user), user);
+
+                    // Revoke old tokens and save the new tokens
+                    revokeOldTokens(user);
+                    saveUserAccountToken(user, newAccessToken, newRefreshToken);
+
+                    response.setStatusCode(REFRESH_TOKEN_SUCCESS);
+                    response.setStatusMessage("Successfully Refreshed AuthToken");
+                    AuthorisationResponseDto responseDto = new AuthorisationResponseDto(
+                            newAccessToken, newRefreshToken, getLastUpdatedAt() , "24hrs");
+                    response.setData(responseDto);
+                } else {
+                    log.warn("Invalid Token signature for user {}.", userEmail);
+                }
+            }
+        } catch (RuntimeException ex){
+            log.error("An error occurred while refreshing the token: {}", ex.getMessage());
+        }
+        return response;
     }
 
     private String getLastUpdatedAt(){
@@ -129,5 +172,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Log successful token saving
         log.info("Saved Access and Refresh tokens for USER {}", userAccount.getEmailAddress());
+    }
+
+    private void revokeOldTokens(UserAccount userAccount){
+        // Log the process of revoking old tokens
+        log.info("Revoking old tokens for customer {}", userAccount.getEmailAddress());
+
+        // Revoke all old tokens for the customer
+        List<AuthToken> validTokens = tokenRepository.findAllByAccessTokenByUser_id(userAccount.getId());
+        if (validTokens.isEmpty()){
+            log.info("No valid tokens found for customer {}.", userAccount.getEmailAddress());
+            return;
+        }
+        validTokens.forEach(token -> {
+            token.setRevoked(true);
+            token.setExpired(true);
+        });
+        tokenRepository.saveAll(validTokens);
+
+        // Log successful token revocation
+        log.info("Revoked old tokens for customer {}.", userAccount.getEmailAddress());
     }
 }
