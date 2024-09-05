@@ -34,18 +34,18 @@ public class JwtService {
 
     public String createJWT(UserAccount user) { return  generateToken(user); }
 
-    private String generateToken(UserAccount customer){
+    private String generateToken(UserAccount user){
         HashMap<String, Object> claims = new HashMap<>();
 
-        claims.put("customerId",customer.getId());
-        claims.put("firstName",customer.getFirstName());
-        claims.put("lastName",customer.getLastName());
-        claims.put("email",customer.getEmailAddress());
-        claims.put("phoneNumber",customer.getPhoneNumber());
+        claims.put("userID",user.getId());
+        claims.put("firstName",user.getFirstName());
+        claims.put("lastName",user.getLastName());
+        claims.put("email",user.getEmailAddress());
+        claims.put("phoneNumber",user.getPhoneNumber());
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(customer.getUsername())
+                .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY)
