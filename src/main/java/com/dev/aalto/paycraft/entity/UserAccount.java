@@ -32,11 +32,6 @@ public class UserAccount extends BaseEntity implements UserDetails {
 
     private String password;
 
-    // Mapping the CompanyAccount to a particular user using phoneNumber in UserAccount.
-    @OneToMany
-    @JoinColumn(name = "companyAccount", referencedColumnName = "companyId", unique = true)
-    private List<CompanyAccount> userAccount;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
