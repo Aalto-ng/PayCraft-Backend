@@ -179,7 +179,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("Revoking old tokens for customer {}", userAccount.getEmailAddress());
 
         // Revoke all old tokens for the customer
-        List<AuthToken> validTokens = tokenRepository.findAllByAccessTokenByUser_id(userAccount.getId());
+        List<AuthToken> validTokens = tokenRepository.findAllByUser_id(userAccount.getId());
         if (validTokens.isEmpty()){
             log.info("No valid tokens found for customer {}.", userAccount.getEmailAddress());
             return;

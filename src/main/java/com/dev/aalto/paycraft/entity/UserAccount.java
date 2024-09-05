@@ -13,14 +13,23 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @ToString @Table(name = "user_account")
 public class UserAccount extends BaseEntity implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String emailAddress;
+
+    @Column(unique = true, nullable = false)
     private String phoneNumber;
+
     private String jobTitle;
+
     private String password;
 
     @Override

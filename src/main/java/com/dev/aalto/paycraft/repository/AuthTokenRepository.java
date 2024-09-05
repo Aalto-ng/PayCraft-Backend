@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
     Optional<AuthToken> findByAccessToken(String authToken);
-    List<AuthToken> findAllByAccessTokenByUser_id(Long userId);
+    List<AuthToken> findAllByUser_id(Long userId);
 }
