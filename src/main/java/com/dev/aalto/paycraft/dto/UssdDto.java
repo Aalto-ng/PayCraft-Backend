@@ -1,12 +1,11 @@
-package com.dev.aalto.paycraft.ussd.dto;
+package com.dev.aalto.paycraft.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
+@Data
 @AllArgsConstructor
-public class CallbackDto {
+@NoArgsConstructor
+public class UssdDto {
     private String sessionId;
     private String serviceCode;
     private String phoneNumber;
