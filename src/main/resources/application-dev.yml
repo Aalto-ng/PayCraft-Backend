@@ -22,6 +22,8 @@ logging:
       springframework:
         security: DEBUG
 
+secret-string: ${SECRET_STRING}
+
 server:
   port: 6020
   error:
