@@ -2,7 +2,7 @@ package com.dev.aalto.paycraft.dto;
 
 import lombok.*;
 
-@Data
+@Data @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAccountDto {

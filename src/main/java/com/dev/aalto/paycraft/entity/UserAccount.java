@@ -16,7 +16,7 @@ public class UserAccount extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String firstName;
 
@@ -31,6 +31,11 @@ public class UserAccount extends BaseEntity implements UserDetails {
     private String jobTitle;
 
     private String password;
+
+    // Mapping the CompanyAccount to a particular user using phoneNumber in UserAccount.
+    @OneToMany
+    @JoinColumn(name = "companyAccount", referencedColumnName = "companyId", unique = true)
+    private List<CompanyAccount> userAccount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

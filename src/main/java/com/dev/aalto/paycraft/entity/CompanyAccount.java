@@ -11,7 +11,7 @@ public class CompanyAccount extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long companyId;
 
     private String companyName;
 

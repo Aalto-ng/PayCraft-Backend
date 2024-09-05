@@ -18,6 +18,6 @@ public class UserDetailService implements UserDetailsService {
         if (userOptional.isPresent()) {
             return userOptional.orElseThrow();
         }
-        throw new UsernameNotFoundException("No USER found with email: " + username);
+        throw new UsernameNotFoundException("No USER found with emailAddress: " + username);
     }
 }

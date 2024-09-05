@@ -1,7 +1,9 @@
 package com.dev.aalto.paycraft.service;
 
 import com.dev.aalto.paycraft.dto.CreateAccountDto;
+import com.dev.aalto.paycraft.dto.DefaultApiResponse;
+import com.dev.aalto.paycraft.dto.UserAccountDto;
 
 public interface ICreateAccountService {
-    public void createUserAccount(CreateAccountDto request);
+    DefaultApiResponse<UserAccountDto> createUserAccount(CreateAccountDto request);
 }
