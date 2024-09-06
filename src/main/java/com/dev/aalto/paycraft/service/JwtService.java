@@ -3,6 +3,7 @@ package com.dev.aalto.paycraft.service;
 import com.dev.aalto.paycraft.entity.UserAccount;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,9 +28,13 @@ public class JwtService {
     private SecretKey SECRET_KEY;
     private static final long EXPIRATION_TIME = 86400000; //24hrs
 
-    public void JWTService() {
+    @PostConstruct
+    public void init() {
+        if (SECRET_STRING == null) {
+            throw new IllegalStateException("SECRET_STRING is not configured");
+        }
         byte[] keyByte = Base64.getDecoder().decode(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
-        this.SECRET_KEY = new SecretKeySpec(keyByte,"HmacSHA256");
+        this.SECRET_KEY = new SecretKeySpec(keyByte, "HmacSHA256");
     }
 
     public String createJWT(UserAccount user) { return  generateToken(user); }
