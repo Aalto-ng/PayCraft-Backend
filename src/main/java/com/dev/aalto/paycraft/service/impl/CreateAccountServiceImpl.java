@@ -11,7 +11,6 @@ import com.dev.aalto.paycraft.repository.CompanyAccountRepository;
 import com.dev.aalto.paycraft.repository.UserAccountRepository;
 import com.dev.aalto.paycraft.service.ICreateAccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,6 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
 
     @Override
     public DefaultApiResponse<UserAccountDto> createUserAccount(CreateAccountDto request) {
-
         DefaultApiResponse<UserAccountDto> response = new DefaultApiResponse<>();
         UserAccount userAccount = UserAccountMapper.maptoUserAccount(new UserAccount(), extractUserAccount(request));
         verifyRecord(userAccount);
