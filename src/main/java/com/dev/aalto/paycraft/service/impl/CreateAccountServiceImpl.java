@@ -11,6 +11,7 @@ import com.dev.aalto.paycraft.repository.CompanyAccountRepository;
 import com.dev.aalto.paycraft.repository.UserAccountRepository;
 import com.dev.aalto.paycraft.service.ICreateAccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.dev.aalto.paycraft.constant.PayCraftConstant.ONBOARD_SUCCESS;
@@ -19,14 +20,14 @@ import static com.dev.aalto.paycraft.constant.PayCraftConstant.ONBOARD_SUCCESS;
 public class CreateAccountServiceImpl implements ICreateAccountService {
     private final UserAccountRepository userAccountRepository;
     private final CompanyAccountRepository companyAccountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public DefaultApiResponse<UserAccountDto> createUserAccount(CreateAccountDto request) {
-
         DefaultApiResponse<UserAccountDto> response = new DefaultApiResponse<>();
         UserAccount userAccount = UserAccountMapper.maptoUserAccount(new UserAccount(), extractUserAccount(request));
         verifyRecord(userAccount);
-        createAccount(userAccount, request.getPassword());
+        userAccount.setPassword(passwordEncoder.encode(request.getPassword()));
         /* create user account during onboarding */
         userAccountRepository.save(userAccount);
         /* create company account during onboarding */
@@ -79,7 +80,4 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
         return companyAccount;
     }
 
-    private void createAccount(UserAccount userAccount, String password){
-        userAccount.setPassword(password + "weuihwoei"); //todo: encrypt password
-    }
 }

@@ -22,7 +22,7 @@ logging:
       springframework:
         security: DEBUG
 
-secret-string: ${SECRET_STRING}
+secret-string: ${SECRET_STRING:PAYHFUKNSF09839FELIKS9348J39GHIUEWFJR9EF089WUJ4FNR9HG738UJW4WOLLSTONECRAFT}
 
 server:
   port: 6020
