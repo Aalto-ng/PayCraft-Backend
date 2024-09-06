@@ -1,6 +1,7 @@
 package com.dev.aalto.paycraft.service.impl;
 
 import com.dev.aalto.paycraft.dto.CreateAccountDto;
+import com.dev.aalto.paycraft.dto.DefaultApiResponse;
 import com.dev.aalto.paycraft.dto.UserAccountDto;
 import com.dev.aalto.paycraft.entity.CompanyAccount;
 import com.dev.aalto.paycraft.entity.UserAccount;
@@ -12,13 +13,17 @@ import com.dev.aalto.paycraft.service.ICreateAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.dev.aalto.paycraft.constant.PayCraftConstant.ONBOARD_SUCCESS;
+
 @Service @RequiredArgsConstructor
 public class CreateAccountServiceImpl implements ICreateAccountService {
     private final UserAccountRepository userAccountRepository;
     private final CompanyAccountRepository companyAccountRepository;
 
     @Override
-    public void createUserAccount(CreateAccountDto request) {
+    public DefaultApiResponse<UserAccountDto> createUserAccount(CreateAccountDto request) {
+
+        DefaultApiResponse<UserAccountDto> response = new DefaultApiResponse<>();
         UserAccount userAccount = UserAccountMapper.maptoUserAccount(new UserAccount(), extractUserAccount(request));
         verifyRecord(userAccount);
         createAccount(userAccount, request.getPassword());
@@ -26,6 +31,20 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
         userAccountRepository.save(userAccount);
         /* create company account during onboarding */
         companyAccountRepository.save(extractCompanyAccount(request, userAccount));
+
+        UserAccountDto data = UserAccountDto.builder()
+                .firstName(userAccount.getFirstName())
+                .lastName(userAccount.getLastName())
+                .emailAddress(userAccount.getUsername())
+                .phoneNumber(userAccount.getPhoneNumber())
+                .jobTitle(userAccount.getJobTitle())
+                .build();
+
+        response.setStatusCode(ONBOARD_SUCCESS);
+        response.setStatusMessage("User Onboarded Successfully");
+        response.setData(data);
+
+        return response;
     }
 
     private void verifyRecord(UserAccount userAccount){
@@ -35,7 +54,7 @@ public class CreateAccountServiceImpl implements ICreateAccountService {
         }
 
         if(userAccountRepository.findByEmailAddress(userAccount.getEmailAddress()).isPresent()){
-            throw new UserAccountAlreadyExists("Account already registered with this email address : "
+            throw new UserAccountAlreadyExists("Account already registered with this emailAddress address : "
                     + userAccount.getEmailAddress());
         }
     }
