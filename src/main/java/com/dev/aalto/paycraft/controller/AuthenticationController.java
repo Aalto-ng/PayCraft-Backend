@@ -1,6 +1,5 @@
 package com.dev.aalto.paycraft.controller;
 
-import com.dev.aalto.paycraft.constant.PayCraftConstant;
 import com.dev.aalto.paycraft.dto.*;
 import com.dev.aalto.paycraft.service.IAuthenticationService;
 import com.dev.aalto.paycraft.service.ICreateAccountService;

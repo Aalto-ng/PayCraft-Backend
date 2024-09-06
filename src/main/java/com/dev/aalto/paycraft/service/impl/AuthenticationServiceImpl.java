@@ -26,7 +26,7 @@ import java.util.Optional;
 import static com.dev.aalto.paycraft.constant.PayCraftConstant.*;
 
 @Slf4j @Service @RequiredArgsConstructor
-public class IAuthenticationServiceImpl implements IAuthenticationService {
+public class AuthenticationServiceImpl implements IAuthenticationService {
     private final UserAccountRepository userRepository;
     private final AuthTokenRepository tokenRepository;
     private final JwtService jwtService;
