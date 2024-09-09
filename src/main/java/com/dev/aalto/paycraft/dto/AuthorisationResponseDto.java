@@ -4,5 +4,6 @@ public record AuthorisationResponseDto(
         String accessToken,
         String refreshToken,
         String issuedAt,
-        String expirationTime
+        String accessTokenValidityTime,
+        String refreshTokenValidityTime
 ) {}
