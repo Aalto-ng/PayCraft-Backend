@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             accessAndRefreshToken result = getGenerateAccessTokenAndRefreshToken(userAccount);
 
             AuthorisationResponseDto authorisationResponseDto = new AuthorisationResponseDto(
-                    result.accessToken(), result.refreshToken(), getLastUpdatedAt(), "24hrs");
+                    result.accessToken(), result.refreshToken(), getLastUpdatedAt(), "1hr","24hrs");
 
             // Authenticate the user with the provided credentials
             authenticationManager.authenticate(
@@ -118,7 +118,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     response.setStatusCode(REFRESH_TOKEN_SUCCESS);
                     response.setStatusMessage("Successfully Refreshed AuthToken");
                     AuthorisationResponseDto responseDto = new AuthorisationResponseDto(
-                            newAccessToken, newRefreshToken, getLastUpdatedAt() , "24hrs");
+                            newAccessToken, newRefreshToken, getLastUpdatedAt(), "1hr", "24hrs");
                     response.setData(responseDto);
                 } else {
                     log.warn("Invalid Token signature for user {}.", userEmail);

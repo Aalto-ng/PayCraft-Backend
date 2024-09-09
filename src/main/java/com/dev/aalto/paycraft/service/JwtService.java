@@ -26,7 +26,8 @@ public class JwtService {
     @Value("${secret-string}")
     private String SECRET_STRING;
     private SecretKey SECRET_KEY;
-    private static final long EXPIRATION_TIME = 86400000; //24hrs
+    private static final long ACCESS_TOKEN_VALIDITY_TIME = 3_600_000; // 1hr
+    private static final long REFRESH_TOKEN_VALIDITY_TIME = 86_400_000; //24hrs
 
     @PostConstruct
     public void init() {
@@ -52,7 +53,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_TIME))
                 .signWith(SECRET_KEY)
                 .compact();
     }
@@ -62,7 +63,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY_TIME))
                 .signWith(SECRET_KEY)
                 .compact();
     }
