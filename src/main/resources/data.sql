@@ -1,12 +1,3 @@
-CREATE TABLE CompanyProfile (
-    companyName VARCHAR(255) NOT NULL,
-    companySize ENUM('SMALL', 'MEDIUM', 'LARGE', 'ENTERPRISE'),
-    officeAddress VARCHAR(255) NOT NULL,
-    industryType VARCHAR(100) NOT NULL,
-    emailAddress VARCHAR(100) NOT NULL,
-    companyPhoneNumber VARCHAR(20) NOT NULL
-);
-
 CREATE TABLE EmployerProfile (
     employerId INT AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(100) NOT NULL,
@@ -19,6 +10,18 @@ CREATE TABLE EmployerProfile (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE CompanyProfile (
+    companyProfileId INT AUTO_INCREMENT PRIMARY KEY,
+    companyName VARCHAR(255) NOT NULL,
+    companySize ENUM("SMALL", "MEDIUM", "LARGE", "ENTERPRISE"),
+    officeAddress VARCHAR(255) NOT NULL,
+    industryType VARCHAR(100) NOT NULL,
+    emailAddress VARCHAR(100) NOT NULL,
+    companyPhoneNumber VARCHAR(20) NOT NULL,
+    employerId INT,
+    FOREIGN KEY (employerId) REFERENCES EmployerProfile(employerId)
+);
+
 CREATE TABLE EmployeeProfile (
     employeeID INT AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(255) NOT NULL,
@@ -26,15 +29,15 @@ CREATE TABLE EmployeeProfile (
     dateOfBirth DATE NOT NULL,
     address VARCHAR(255) NOT NULL,
     startDate DATE NOT NULL,
-    endDate DATE, -- optional
+    endDate DATE,
     jobTitle VARCHAR(255) NOT NULL,
-    department VARCHAR(255), -- optional
-    salaryType ENUM('HOURLY', 'MONTHLY', 'ANNUALLY'), -- optional
+    department VARCHAR(255),
+    salaryType ENUM('HOURLY', 'MONTHLY', 'ANNUALLY'),
     salaryAmount DECIMAL(15, 2) NOT NULL,
     bankAccountDetails VARCHAR(255) NOT NULL,
     employmentStatus ENUM('ACTIVE', 'ON LEAVE', 'TERMINATED', 'RESIGNED', 'RETIRED', 'CONTRACT'),
-    employerId INT,
-    FOREIGN KEY (employerId) REFERENCES EmployerProfile(employerId)
+    companyProfileId INT,
+    FOREIGN KEY (companyProfileId) REFERENCES CompanyProfile(companyProfileId)
 );
 
 CREATE TABLE Payroll (
