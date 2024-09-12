@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.dto;
+package com.aalto.paycraft.dto;
 
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;

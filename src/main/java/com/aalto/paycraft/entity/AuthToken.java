@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.entity;
+package com.aalto.paycraft.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -29,6 +29,6 @@ public class AuthToken {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userAccountId", referencedColumnName = "userId")
-    private UserAccount user;
+    @JoinColumn(name = "employerProfileId", referencedColumnName = "employerProfileId")
+    private EmployerProfile employerProfile;
 }

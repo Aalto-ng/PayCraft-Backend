@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.audit;
+package com.aalto.paycraft.audit;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;

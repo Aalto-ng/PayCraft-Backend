@@ -1,9 +1,9 @@
-package com.dev.aalto.paycraft.config;
+package com.aalto.paycraft.config;
 
-import com.dev.aalto.paycraft.entity.AuthToken;
-import com.dev.aalto.paycraft.repository.AuthTokenRepository;
-import com.dev.aalto.paycraft.service.JwtService;
-import com.dev.aalto.paycraft.service.UserDetailService;
+import com.aalto.paycraft.entity.AuthToken;
+import com.aalto.paycraft.repository.AuthTokenRepository;
+import com.aalto.paycraft.service.JwtService;
+import com.aalto.paycraft.service.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

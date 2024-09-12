@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.config;
+package com.aalto.paycraft.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("api/v1/auth/**", "/error**").permitAll() // Permits all Users to access Authentication Endpoints
+                        .requestMatchers(
+                                "api/v1/auth/**",
+                                "api/v1/employer/create",
+                                "/error**").permitAll() // Permits all Users to access Authentication Endpoints
                         .anyRequest().authenticated()) // Every other Request has to be authenticated.
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 /*

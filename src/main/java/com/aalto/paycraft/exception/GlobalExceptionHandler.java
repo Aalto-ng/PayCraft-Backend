@@ -1,8 +1,8 @@
-package com.dev.aalto.paycraft.exception;
+package com.aalto.paycraft.exception;
 
 
-import com.dev.aalto.paycraft.dto.DefaultApiResponse;
-import com.dev.aalto.paycraft.dto.ErrorResponseDto;
+import com.aalto.paycraft.dto.DefaultApiResponse;
+import com.aalto.paycraft.dto.ErrorResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dev.aalto.paycraft.constant.PayCraftConstant.*;
+import static com.aalto.paycraft.constant.PayCraftConstant.*;
 
 @Slf4j @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {

@@ -1,6 +1,6 @@
-package com.dev.aalto.paycraft.service;
+package com.aalto.paycraft.service;
 
-import com.dev.aalto.paycraft.entity.UserAccount;
+import com.aalto.paycraft.entity.EmployerProfile;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
@@ -38,30 +38,30 @@ public class JwtService {
         this.SECRET_KEY = new SecretKeySpec(keyByte, "HmacSHA256");
     }
 
-    public String createJWT(UserAccount user) { return  generateToken(user); }
+    public String createJWT(EmployerProfile employerProfile) { return  generateToken(employerProfile); }
 
-    private String generateToken(UserAccount user){
+    private String generateToken(EmployerProfile employerProfile){
         HashMap<String, Object> claims = new HashMap<>();
 
-        claims.put("userID",user.getUserId());
-        claims.put("firstName",user.getFirstName());
-        claims.put("lastName",user.getLastName());
-        claims.put("email",user.getEmailAddress());
-        claims.put("phoneNumber",user.getPhoneNumber());
+        claims.put("userID",employerProfile.getEmployerProfileId());
+        claims.put("firstName",employerProfile.getFirstName());
+        claims.put("lastName",employerProfile.getLastName());
+        claims.put("email",employerProfile.getEmailAddress());
+        claims.put("phoneNumber",employerProfile.getPhoneNumber());
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(user.getUsername())
+                .subject(employerProfile.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_TIME))
                 .signWith(SECRET_KEY)
                 .compact();
     }
 
-    public String generateRefreshToken(HashMap<String, Object> claims, UserAccount user){
+    public String generateRefreshToken(HashMap<String, Object> claims, EmployerProfile employerProfile){
         return Jwts.builder()
                 .claims(claims)
-                .subject(user.getUsername())
+                .subject(employerProfile.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY_TIME))
                 .signWith(SECRET_KEY)

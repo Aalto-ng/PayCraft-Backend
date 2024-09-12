@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.config;
+package com.aalto.paycraft.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

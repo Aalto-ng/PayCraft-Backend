@@ -1,7 +1,7 @@
-package com.dev.aalto.paycraft.service.impl;
+package com.aalto.paycraft.service.impl;
 
-import com.dev.aalto.paycraft.dto.UssdDto;
-import com.dev.aalto.paycraft.service.IUssdService;
+import com.aalto.paycraft.dto.UssdDto;
+import com.aalto.paycraft.service.IUssdService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.dto;
+package com.aalto.paycraft.dto;
 
 public record LoginRequestDto(
         String emailAddress,

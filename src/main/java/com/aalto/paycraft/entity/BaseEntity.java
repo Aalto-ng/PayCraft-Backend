@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.entity;
+package com.aalto.paycraft.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

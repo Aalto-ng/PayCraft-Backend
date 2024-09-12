@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.exception;
+package com.aalto.paycraft.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

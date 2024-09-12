@@ -1,7 +1,7 @@
-package com.dev.aalto.paycraft.api;
+package com.aalto.paycraft.api;
 
-import com.dev.aalto.paycraft.dto.UssdDto;
-import com.dev.aalto.paycraft.service.IUssdService;
+import com.aalto.paycraft.dto.UssdDto;
+import com.aalto.paycraft.service.IUssdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

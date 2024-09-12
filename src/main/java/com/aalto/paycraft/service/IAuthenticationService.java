@@ -1,11 +1,11 @@
-package com.dev.aalto.paycraft.service;
+package com.aalto.paycraft.service;
 
-import com.dev.aalto.paycraft.dto.AuthorisationResponseDto;
-import com.dev.aalto.paycraft.dto.DefaultApiResponse;
-import com.dev.aalto.paycraft.dto.LoginRequestDto;
-import com.dev.aalto.paycraft.dto.RefreshTokenRequestDto;
+import com.aalto.paycraft.dto.AuthorizationResponseDto;
+import com.aalto.paycraft.dto.DefaultApiResponse;
+import com.aalto.paycraft.dto.LoginRequestDto;
+import com.aalto.paycraft.dto.RefreshTokenRequestDto;
 
 public interface IAuthenticationService {
-    DefaultApiResponse<AuthorisationResponseDto> login(LoginRequestDto requestBody);
-    DefaultApiResponse<AuthorisationResponseDto> refreshToken(RefreshTokenRequestDto requestBody);
+    DefaultApiResponse<AuthorizationResponseDto> login(LoginRequestDto requestBody);
+    DefaultApiResponse<AuthorizationResponseDto> refreshToken(RefreshTokenRequestDto requestBody);
 }

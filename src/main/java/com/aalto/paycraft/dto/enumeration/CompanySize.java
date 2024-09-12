@@ -1,4 +1,4 @@
-package com.dev.aalto.paycraft.dto.enumeration;
+package com.aalto.paycraft.dto.enumeration;
 
 public enum CompanySize{
     SMALL,

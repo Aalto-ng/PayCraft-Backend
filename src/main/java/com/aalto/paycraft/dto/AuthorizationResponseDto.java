@@ -1,6 +1,6 @@
 package com.aalto.paycraft.dto;
 
-public record AuthorisationResponseDto(
+public record AuthorizationResponseDto(
         String accessToken,
         String refreshToken,
         String issuedAt,

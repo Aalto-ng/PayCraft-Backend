@@ -1,6 +1,6 @@
-package com.dev.aalto.paycraft.repository;
+package com.aalto.paycraft.repository;
 
-import com.dev.aalto.paycraft.entity.AuthToken;
+import com.aalto.paycraft.entity.AuthToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
     Optional<AuthToken> findByAccessToken(String authToken);
-    List<AuthToken> findAllByUser_userId(Long userId);
+    List<AuthToken> findAllByEmployerProfile_EmployerProfileId(Long employerProfileId);
 }
