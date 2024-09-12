@@ -3,6 +3,7 @@ package com.aalto.paycraft.service.impl;
 import com.aalto.paycraft.constant.PayCraftConstant;
 import com.aalto.paycraft.dto.DefaultApiResponse;
 import com.aalto.paycraft.dto.EmployerProfileDTO;
+import com.aalto.paycraft.dto.EmployerProfilePasswordUpdateDTO;
 import com.aalto.paycraft.dto.EmployerProfileUpdateDTO;
 import com.aalto.paycraft.entity.EmployerProfile;
 import com.aalto.paycraft.exception.EmployerProfileAlreadyExists;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+//import java.util.Objects;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,38 +35,56 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
 
         verifyRecord(employerProfileDTO);
 
+        // Map DTO to entity and encrypt the password
         EmployerProfile employerProfile = EmployerProfileMapper.mapToEmployerProfile(new EmployerProfile(), employerProfileDTO);
-
-        /* encrypt password */
         employerProfile.setPassword(passwordEncoder.encode(employerProfileDTO.getPassword()));
 
+        // Save the employer profile
         EmployerProfile savedEmployerProfile = employerProfileRepository.save(employerProfile);
-        EmployerProfileDTO responseData = EmployerProfileDTO.builder()
-                .employerProfileId(savedEmployerProfile.getEmployerProfileId())
-                .firstName(savedEmployerProfile.getFirstName())
-                .lastName(savedEmployerProfile.getLastName())
-                .phoneNumber(savedEmployerProfile.getPhoneNumber())
-                .emailAddress(savedEmployerProfile.getEmailAddress())
-                .build();
-
         response.setStatusMessage(ONBOARD_SUCCESS);
         response.setStatusMessage("Employer Profile Created Successfully");
-        response.setData(responseData);
+
+        // Build the response DTO with saved data
+        response.setData(
+                EmployerProfileDTO.builder()
+                        .employerProfileId(employerProfile.getEmployerProfileId())
+                        .firstName(employerProfile.getFirstName())
+                        .lastName(employerProfile.getLastName())
+                        .phoneNumber(employerProfile.getPhoneNumber())
+                        .emailAddress(employerProfile.getEmailAddress())
+                        .personalAddress(employerProfile.getPersonalAddress())
+                        .jobTitle(employerProfile.getJobTitle())
+                        .build()
+        );
         return response;
     }
 
     @Override
     public DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerId) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        EmployerProfile employerProfile;
-
         Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+
+        // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
-            employerProfile = employerProfileOpt.get();
+            EmployerProfile employerProfile = employerProfileOpt.get();
+
+            // Build the response DTO with profile data
             response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
             response.setStatusMessage("Employer Profile Information");
-            response.setData(EmployerProfileMapper.mapToEmployerProfileDTO(employerProfile, new EmployerProfileDTO()));
-        }else{
+            response.setData(
+                    EmployerProfileDTO.builder()
+                            .employerProfileId(employerProfile.getEmployerProfileId())
+                            .firstName(employerProfile.getFirstName())
+                            .lastName(employerProfile.getLastName())
+                            .phoneNumber(employerProfile.getPhoneNumber())
+                            .emailAddress(employerProfile.getEmailAddress())
+                            .personalAddress(employerProfile.getPersonalAddress())
+                            .jobTitle(employerProfile.getJobTitle())
+                            .build()
+            );
+        }
+        else {
+            // Throw exception if employer profile is not found
             throw new EmployerProfileNotFound("Employer Profile Not Found");
         }
         return response;
@@ -73,41 +94,134 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
     @Transactional
     public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerId, EmployerProfileUpdateDTO employerProfileDTO) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        EmployerProfile employerProfile;
-
         Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+
+        // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
-            employerProfile = employerProfileOpt.get();
+            EmployerProfile employerProfile = employerProfileOpt.get();
+
+            // Update the record with the new data
             EmployerProfile updatedEmployerProfile = updateRecord(employerProfile, employerProfileDTO);
             employerProfileRepository.save(updatedEmployerProfile);
+
             response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
-            response.setStatusMessage("Updated Employer Profile Information");
-            response.setData(EmployerProfileMapper.mapToEmployerProfileDTO(updatedEmployerProfile, new EmployerProfileDTO()));
+            response.setStatusMessage("Updated Employer Profile");
+
+            // Response only shows what was changed
+            response.setData(
+                    EmployerProfileDTO.builder()
+                            .firstName(employerProfileDTO.getFirstName())
+                            .lastName(employerProfileDTO.getLastName())
+                            .phoneNumber(employerProfileDTO.getPhoneNumber())
+                            .emailAddress(employerProfileDTO.getEmailAddress())
+                            .personalAddress(employerProfileDTO.getPersonalAddress())
+                            .jobTitle(employerProfileDTO.getJobTitle())
+                            .build()
+            );
             return response;
-        }else{
+        }
+        else {
+            // Throw exception if employer profile is not found
             throw new EmployerProfileNotFound("Employer Profile Not Found");
         }
     }
 
     @Override
-    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(String employerId) {
-        return null;
+    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerId) {
+        DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+
+        // Check if the employer profile exists
+        if(employerProfileOpt.isPresent()){
+            EmployerProfile employerProfile = employerProfileOpt.get();
+
+            // Delete the profile
+            employerProfileRepository.delete(employerProfile);
+
+            response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
+            response.setStatusMessage("Deleted Employer Profile");
+
+            // Build response with the deleted profile data
+            response.setData(
+                    EmployerProfileDTO.builder()
+                            .employerProfileId(employerProfile.getEmployerProfileId())
+                            .emailAddress(employerProfile.getEmailAddress())
+                            .phoneNumber(employerProfile.getPhoneNumber())
+                            .build()
+            );
+            return response;
+        } else {
+            // Throw exception if employer profile is not found
+            throw new EmployerProfileNotFound("Employer Profile Not Found");
+        }
     }
 
-    private void verifyRecord(EmployerProfileDTO employerProfileDTO){
+    @Override
+    @Transactional
+    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO) {
+        DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+
+        // Validate that the new password is different from the old one
+        if(Objects.equals(employerProfilePasswordUpdateDTO.getOldPassword(), employerProfilePasswordUpdateDTO.getNewPassword())) {
+            throw new RuntimeException("New password must be different from the old password");
+        }
+
+        // Check if the employer profile exists
+        if(employerProfileOpt.isPresent()){
+            EmployerProfile employerProfile = employerProfileOpt.get();
+
+            // Verify the old password matches the one in the database
+            if(!passwordEncoder.matches(employerProfilePasswordUpdateDTO.getOldPassword(), employerProfile.getPassword())) {
+                throw new RuntimeException("Current password is incorrect");
+            }
+
+            // Verify the new password isn't the same as the one in the database
+            if(passwordEncoder.matches(employerProfilePasswordUpdateDTO.getNewPassword(), employerProfile.getPassword())) {
+                throw new RuntimeException("New password must be different from the current password");
+            }
+
+            // Save the updated password
+            employerProfileRepository.save(updatePassword(employerProfile, employerProfilePasswordUpdateDTO.getNewPassword()));
+
+            response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
+            response.setStatusMessage("Password Updated");
+
+            // Build response with updated profile data
+            response.setData(
+                    EmployerProfileDTO.builder()
+                            .employerProfileId(employerProfile.getEmployerProfileId())
+                            .emailAddress(employerProfile.getEmailAddress())
+                            .phoneNumber(employerProfile.getPhoneNumber())
+                            .build()
+            );
+            return response;
+        }
+        else {
+            // Throw exception if employer profile is not found
+            throw new EmployerProfileNotFound("Employer Profile Not Found");
+        }
+    }
+
+    private EmployerProfile updatePassword(EmployerProfile employerProfile, String password) {
+        // Encrypt and update the password
+        employerProfile.setPassword(passwordEncoder.encode(password));
+        return employerProfile;
+    }
+
+    private void verifyRecord(EmployerProfileDTO employerProfileDTO) {
+        // Verify that the phone number or email address doesn't already exist
         if(employerProfileRepository.findByPhoneNumber(employerProfileDTO.getPhoneNumber()).isPresent()){
-            throw new EmployerProfileAlreadyExists("Account already registered with this phone number : "
-                    + employerProfileDTO.getPhoneNumber());
+            throw new EmployerProfileAlreadyExists("Account already registered with this phone number: " + employerProfileDTO.getPhoneNumber());
         }
 
         if(employerProfileRepository.findByEmailAddress(employerProfileDTO.getEmailAddress()).isPresent()){
-            throw new EmployerProfileAlreadyExists("Account already registered with this emailAddress address : "
-                    + employerProfileDTO.getEmailAddress());
+            throw new EmployerProfileAlreadyExists("Account already registered with this email address: " + employerProfileDTO.getEmailAddress());
         }
     }
 
     private EmployerProfile updateRecord(EmployerProfile destEmployerProfile, EmployerProfileUpdateDTO srcEmployerProfile) {
-        // These fields should not be updated
+        // Update all non-null fields
         if(srcEmployerProfile.getFirstName() != null)
             destEmployerProfile.setFirstName(srcEmployerProfile.getFirstName());
         if(srcEmployerProfile.getLastName() != null)
@@ -121,14 +235,10 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         if(srcEmployerProfile.getPhoneNumber() != null)
             destEmployerProfile.setPhoneNumber(srcEmployerProfile.getPhoneNumber());
 
-        // Only update BVN if necessary (optional)
-        if (srcEmployerProfile.getBvn() != null && !srcEmployerProfile.getBvn().equals(destEmployerProfile.getBvn())) {
-            // Add additional checks here if necessary
+        // Update BVN if different
+        if(srcEmployerProfile.getBvn() != null && !Objects.equals(destEmployerProfile.getBvn(), srcEmployerProfile.getBvn())) {
             destEmployerProfile.setBvn(srcEmployerProfile.getBvn());
         }
-
-        // Don't update employerProfileId or password here
         return destEmployerProfile;
     }
-
 }
