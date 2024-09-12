@@ -36,6 +36,7 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
         companyProfile.setEmployerProfile(employerProfile);
         companyProfileRepository.save(companyProfile);
 
+        // Setting the dto to null to prevent the employers BVN from being returned
         employerProfileDTO = EmployerProfileMapper.mapToEmployerProfileDTO(employerProfile, new EmployerProfileDTO());
         employerProfileDTO.setBvn(null);
 

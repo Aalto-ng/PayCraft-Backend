@@ -19,7 +19,7 @@ public class CompanyProfileController {
     private final ICompanyProfileService iCompanyProfileService;
 
     @PostMapping("/create/{employerProfileId}")
-    public ResponseEntity<  DefaultApiResponse<CompanyProfileDTO>> createCompanyProfile(@Valid @RequestBody CompanyProfileDTO companyProfileDTO, @PathVariable("employerProfileId") UUID employerProfileId){
+    public ResponseEntity<DefaultApiResponse<CompanyProfileDTO>> createCompanyProfile(@Valid @RequestBody CompanyProfileDTO companyProfileDTO, @PathVariable("employerProfileId") UUID employerProfileId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(iCompanyProfileService.createCompanyProfile(companyProfileDTO, employerProfileId));
     }

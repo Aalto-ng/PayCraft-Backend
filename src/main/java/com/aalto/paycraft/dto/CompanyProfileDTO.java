@@ -1,7 +1,6 @@
 package com.aalto.paycraft.dto;
 
 import com.aalto.paycraft.dto.enumeration.CompanySize;
-import com.aalto.paycraft.entity.EmployerProfile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
