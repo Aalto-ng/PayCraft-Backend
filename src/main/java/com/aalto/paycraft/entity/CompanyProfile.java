@@ -38,7 +38,7 @@ public class CompanyProfile extends BaseEntity {
     @Column(nullable = false)
     private String companyEmailAddress;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String companyPhoneNumber;
 
     @JsonIgnore

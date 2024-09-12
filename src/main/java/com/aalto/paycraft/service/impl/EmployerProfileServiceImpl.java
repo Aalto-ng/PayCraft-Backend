@@ -39,8 +39,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         employerProfile.setPassword(passwordEncoder.encode(employerProfileDTO.getPassword()));
 
         // Save the employer profile
-        EmployerProfile savedEmployerProfile = employerProfileRepository.save(employerProfile);
-        response.setStatusMessage(ONBOARD_SUCCESS);
+        employerProfileRepository.save(employerProfile);
+
+        response.setStatusCode(PayCraftConstant.ONBOARD_SUCCESS);
         response.setStatusMessage("Employer Profile Created Successfully");
 
         // Build the response DTO with saved data

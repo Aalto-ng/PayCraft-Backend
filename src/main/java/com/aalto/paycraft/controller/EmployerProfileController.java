@@ -87,4 +87,6 @@ public class EmployerProfileController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(iEmployerProfileService.updateEmployerProfilePassword(employerProfileId, employerProfilePasswordUpdateDTO));
     }
+
+    //todo: get all companies by employerID
 }
