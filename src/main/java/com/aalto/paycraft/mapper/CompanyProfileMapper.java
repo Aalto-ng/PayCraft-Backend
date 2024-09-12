@@ -1,9 +1,7 @@
 package com.aalto.paycraft.mapper;
 
 import com.aalto.paycraft.dto.CompanyProfileDTO;
-import com.aalto.paycraft.dto.EmployerProfileDTO;
 import com.aalto.paycraft.entity.CompanyProfile;
-import com.aalto.paycraft.entity.EmployerProfile;
 
 public class CompanyProfileMapper {
     public static CompanyProfile mapToCompanyProfile(CompanyProfile companyProfile, CompanyProfileDTO companyProfileDTO){
@@ -16,14 +14,13 @@ public class CompanyProfileMapper {
         return companyProfile;
     }
 
-    public static EmployerProfileDTO mapToEmployerProfileDTO(EmployerProfile employerProfile, EmployerProfileDTO employerProfileDTO){
-        employerProfileDTO.setFirstName(employerProfile.getFirstName());
-        employerProfileDTO.setLastName(employerProfile.getLastName());
-        employerProfileDTO.setEmailAddress(employerProfile.getEmailAddress());
-        employerProfileDTO.setPhoneNumber(employerProfile.getPhoneNumber());
-        employerProfileDTO.setPersonalAddress(employerProfile.getPersonalAddress());
-        employerProfileDTO.setJobTitle(employerProfile.getJobTitle());
-        employerProfileDTO.setBvn(employerProfile.getBvn());
-        return employerProfileDTO;
+    public static CompanyProfileDTO mapToCompanyProfileDTO(CompanyProfile companyProfile, CompanyProfileDTO companyProfileDTO){
+        companyProfileDTO.setCompanyName(companyProfile.getCompanyName());
+        companyProfileDTO.setCompanySize(companyProfile.getCompanySize());
+        companyProfileDTO.setOfficeAddress(companyProfile.getOfficeAddress());
+        companyProfileDTO.setIndustryType(companyProfile.getIndustryType());
+        companyProfileDTO.setCompanyEmailAddress(companyProfile.getCompanyEmailAddress());
+        companyProfileDTO.setCompanyPhoneNumber(companyProfile.getCompanyPhoneNumber());
+        return companyProfileDTO;
     }
 }
