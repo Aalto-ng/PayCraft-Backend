@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
 
 
 @Data
@@ -53,4 +54,7 @@ public class EmployerProfileDTO {
             message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
     )
     private String password;
+
+    /* this profileId is needed for response only. The client wil save it and use it to make other CRUD operations */
+    private UUID employerProfileId;
 }

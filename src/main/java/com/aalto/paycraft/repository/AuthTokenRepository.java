@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
     Optional<AuthToken> findByAccessToken(String authToken);
-    List<AuthToken> findAllByEmployerProfile_EmployerProfileId(Long employerProfileId);
+    List<AuthToken> findAllByEmployerProfile_EmployerProfileId(UUID employerProfileId);
 }

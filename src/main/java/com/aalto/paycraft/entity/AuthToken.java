@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
-@ToString(exclude = {"user"})
+@ToString(exclude = {"employerProfile"})
 public class AuthToken {
 
     @Id

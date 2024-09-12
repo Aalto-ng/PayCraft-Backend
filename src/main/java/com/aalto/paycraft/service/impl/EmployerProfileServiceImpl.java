@@ -30,6 +30,7 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         EmployerProfile savedEmployerProfile = employerProfileRepository.save(employerProfile);
 
         EmployerProfileDTO responseData = EmployerProfileDTO.builder()
+                .employerProfileId(savedEmployerProfile.getEmployerProfileId())
                 .firstName(savedEmployerProfile.getFirstName())
                 .lastName(savedEmployerProfile.getLastName())
                 .phoneNumber(savedEmployerProfile.getPhoneNumber())
