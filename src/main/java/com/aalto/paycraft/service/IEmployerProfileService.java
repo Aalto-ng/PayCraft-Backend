@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public interface IEmployerProfileService {
     DefaultApiResponse<EmployerProfileDTO> createEmployerProfile(EmployerProfileDTO employerProfileDTO);
-    DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerId);
-    DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerId, EmployerProfileUpdateDTO employerProfileDTO);
-    DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerId);
-    DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO);
+    DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerProfileId);
+    DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerProfileId, EmployerProfileUpdateDTO employerProfileDTO);
+    DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerProfileId);
+    DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerProfileId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO);
 }

@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//import java.util.Objects;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,9 +59,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
     }
 
     @Override
-    public DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerId) {
+    public DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerProfileId) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -92,9 +91,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
 
     @Override
     @Transactional
-    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerId, EmployerProfileUpdateDTO employerProfileDTO) {
+    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerProfileId, EmployerProfileUpdateDTO employerProfileDTO) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -127,9 +126,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
     }
 
     @Override
-    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerId) {
+    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerProfileId) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -158,9 +157,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
 
     @Override
     @Transactional
-    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO) {
+    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerProfileId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Validate that the new password is different from the old one
         if(Objects.equals(employerProfilePasswordUpdateDTO.getOldPassword(), employerProfilePasswordUpdateDTO.getNewPassword())) {
