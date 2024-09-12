@@ -16,6 +16,13 @@ public class EmployerProfileMapper {
     }
 
     public static EmployerProfileDTO mapToEmployerProfileDTO(EmployerProfile employerProfile, EmployerProfileDTO employerProfileDTO){
+        employerProfileDTO.setFirstName(employerProfile.getFirstName());
+        employerProfileDTO.setLastName(employerProfile.getLastName());
+        employerProfileDTO.setEmailAddress(employerProfile.getEmailAddress());
+        employerProfileDTO.setPhoneNumber(employerProfile.getPhoneNumber());
+        employerProfileDTO.setPersonalAddress(employerProfile.getPersonalAddress());
+        employerProfileDTO.setJobTitle(employerProfile.getJobTitle());
+        employerProfileDTO.setBvn(employerProfile.getBvn());
         return employerProfileDTO;
     }
 }

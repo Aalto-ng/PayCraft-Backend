@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class PayCraftConstant {
+    public static final String REQUEST_SUCCESS = "00";
+    public static final String NOT_FOUND = "57";
     public static final String STATUS_400 = "49";
 
     // Authentication Related Codes

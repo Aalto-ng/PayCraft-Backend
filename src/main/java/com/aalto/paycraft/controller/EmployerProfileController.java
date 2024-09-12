@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
@@ -29,7 +32,7 @@ public class EmployerProfileController {
     }
 
     @GetMapping("/{employerId}")
-    public ResponseEntity<DefaultApiResponse<?>> getEmployerProfile(@Valid @PathVariable("employerId") String employerId){
+    public ResponseEntity<DefaultApiResponse<?>> getEmployerProfile(@Valid @PathVariable("employerId") UUID employerId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(iEmployerProfileService.getEmployerProfile(employerId));
     }

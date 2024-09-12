@@ -37,8 +37,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UserAccountAlreadyExists.class)
-    public ResponseEntity<ErrorResponseDto> handleUserAccountAlreadyExistException(UserAccountAlreadyExists exception, WebRequest webRequest){
+    @ExceptionHandler(EmployerProfileAlreadyExists.class)
+    public ResponseEntity<ErrorResponseDto> handleEmployerProfileAlreadyExistException(EmployerProfileAlreadyExists exception, WebRequest webRequest){
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 webRequest.getDescription(false),
                 HttpStatus.BAD_REQUEST,
@@ -46,6 +46,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployerProfileNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleEmployerProfileNotFoundException(EmployerProfileNotFound exception, WebRequest webRequest){
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
     @Override
