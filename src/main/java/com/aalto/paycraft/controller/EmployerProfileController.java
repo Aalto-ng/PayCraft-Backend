@@ -2,6 +2,7 @@ package com.aalto.paycraft.controller;
 
 import com.aalto.paycraft.dto.DefaultApiResponse;
 import com.aalto.paycraft.dto.EmployerProfileDTO;
+import com.aalto.paycraft.dto.EmployerProfileUpdateDTO;
 import com.aalto.paycraft.service.IEmployerProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,21 +33,27 @@ public class EmployerProfileController {
     }
 
     @GetMapping("/{employerId}")
-    public ResponseEntity<DefaultApiResponse<?>> getEmployerProfile(@Valid @PathVariable("employerId") UUID employerId){
+    public ResponseEntity<DefaultApiResponse<EmployerProfileDTO>> getEmployerProfile(@Valid @PathVariable("employerId") UUID employerId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(iEmployerProfileService.getEmployerProfile(employerId));
     }
 
     @PutMapping("/{employerId}")
-    public ResponseEntity<DefaultApiResponse<?>> updateEmployerProfile(@Valid @PathVariable("employerId") String employerId){
+    public ResponseEntity<DefaultApiResponse<EmployerProfileDTO>> updateEmployerProfile(@Valid @PathVariable("employerId") UUID employerId, @Valid @RequestBody EmployerProfileUpdateDTO employerProfileDTO){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(iEmployerProfileService.updateEmployerProfile(employerId));
+                .body(iEmployerProfileService.updateEmployerProfile(employerId, employerProfileDTO));
     }
 
-    @DeleteMapping("/employerId")
-    public ResponseEntity<DefaultApiResponse<?>> deleteEmployerProfile(@Valid @PathVariable("employerId") String employerId){
+    @DeleteMapping("/{employerId}")
+    public ResponseEntity<DefaultApiResponse<EmployerProfileDTO>> deleteEmployerProfile(@Valid @PathVariable("employerId") String employerId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(iEmployerProfileService.deleteEmployerProfile(employerId));
+    }
+
+    @PatchMapping("/update/{employerId}")
+    public ResponseEntity<DefaultApiResponse<EmployerProfileDTO>> updatedPassword(@Valid @PathVariable("employerId") String employerId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(iEmployerProfileService.)
     }
 }
 
