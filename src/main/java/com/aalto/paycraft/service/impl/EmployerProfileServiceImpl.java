@@ -20,8 +20,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.aalto.paycraft.constant.PayCraftConstant.ONBOARD_SUCCESS;
-
 @Service
 @RequiredArgsConstructor
 public class EmployerProfileServiceImpl implements IEmployerProfileService {
@@ -110,6 +108,7 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
             // Response only shows what was changed
             response.setData(
                     EmployerProfileDTO.builder()
+                            .employerProfileId(employerProfileId)
                             .firstName(employerProfileDTO.getFirstName())
                             .lastName(employerProfileDTO.getLastName())
                             .phoneNumber(employerProfileDTO.getPhoneNumber())
@@ -220,24 +219,24 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         }
     }
 
-    private EmployerProfile updateRecord(EmployerProfile destEmployerProfile, EmployerProfileUpdateDTO srcEmployerProfile) {
+    private EmployerProfile updateRecord(EmployerProfile destEmployerProfile, EmployerProfileUpdateDTO srcEmployerProfileDTO) {
         // Update all non-null fields
-        if(srcEmployerProfile.getFirstName() != null)
-            destEmployerProfile.setFirstName(srcEmployerProfile.getFirstName());
-        if(srcEmployerProfile.getLastName() != null)
-            destEmployerProfile.setLastName(srcEmployerProfile.getLastName());
-        if(srcEmployerProfile.getJobTitle() != null)
-            destEmployerProfile.setJobTitle(srcEmployerProfile.getJobTitle());
-        if(srcEmployerProfile.getEmailAddress() != null)
-            destEmployerProfile.setEmailAddress(srcEmployerProfile.getEmailAddress());
-        if(srcEmployerProfile.getPersonalAddress() != null)
-            destEmployerProfile.setPersonalAddress(srcEmployerProfile.getPersonalAddress());
-        if(srcEmployerProfile.getPhoneNumber() != null)
-            destEmployerProfile.setPhoneNumber(srcEmployerProfile.getPhoneNumber());
+        if(srcEmployerProfileDTO.getFirstName() != null)
+            destEmployerProfile.setFirstName(srcEmployerProfileDTO.getFirstName());
+        if(srcEmployerProfileDTO.getLastName() != null)
+            destEmployerProfile.setLastName(srcEmployerProfileDTO.getLastName());
+        if(srcEmployerProfileDTO.getJobTitle() != null)
+            destEmployerProfile.setJobTitle(srcEmployerProfileDTO.getJobTitle());
+        if(srcEmployerProfileDTO.getEmailAddress() != null)
+            destEmployerProfile.setEmailAddress(srcEmployerProfileDTO.getEmailAddress());
+        if(srcEmployerProfileDTO.getPersonalAddress() != null)
+            destEmployerProfile.setPersonalAddress(srcEmployerProfileDTO.getPersonalAddress());
+        if(srcEmployerProfileDTO.getPhoneNumber() != null)
+            destEmployerProfile.setPhoneNumber(srcEmployerProfileDTO.getPhoneNumber());
 
         // Update BVN if different
-        if(srcEmployerProfile.getBvn() != null && !Objects.equals(destEmployerProfile.getBvn(), srcEmployerProfile.getBvn())) {
-            destEmployerProfile.setBvn(srcEmployerProfile.getBvn());
+        if(srcEmployerProfileDTO.getBvn() != null && !Objects.equals(destEmployerProfile.getBvn(), srcEmployerProfileDTO.getBvn())) {
+            destEmployerProfile.setBvn(srcEmployerProfileDTO.getBvn());
         }
         return destEmployerProfile;
     }

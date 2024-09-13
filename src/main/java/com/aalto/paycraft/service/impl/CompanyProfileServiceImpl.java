@@ -106,9 +106,32 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
     }
 
     @Override
-    public DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID employerProfileId, CompanyProfileDTO companyProfileDTO) {
+    public DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID companyProfileId, CompanyProfileDTO companyProfileDTO) {
+        DefaultApiResponse<CompanyProfileDTO> response = new DefaultApiResponse<>();
+        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId).orElseThrow(
+                () -> new RuntimeException("Company Profile Not Found")
+        );
+
+        CompanyProfile updatedCompanyProfile = updateRecord(companyProfile, companyProfileDTO);
+        companyProfileRepository.save(updatedCompanyProfile);
+
+        response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
+        response.setStatusMessage("Updated Company Profile");
+        response.setData(
+                CompanyProfileDTO.builder()
+                        .companyProfileId(companyProfileId)
+                        .companyName(companyProfileDTO.getCompanyName())
+                        .companySize(companyProfileDTO.getCompanySize())
+                        .companyEmailAddress(companyProfileDTO.getCompanyEmailAddress())
+                        .companyPhoneNumber(companyProfileDTO.getCompanyPhoneNumber())
+                        .officeAddress(companyProfileDTO.getOfficeAddress())
+                        .industryType(companyProfileDTO.getIndustryType())
+                        .build()
+        );
+
         //Implement the logic later. I'm tired AF
-        return null;
+        //Future David: Done
+        return response;
     }
 
     @Override
@@ -150,5 +173,22 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
         ).isPresent()){
             throw new RuntimeException("This company name already exists under this User");
         }
+    }
+
+    private CompanyProfile updateRecord(CompanyProfile destCompanyProfile, CompanyProfileDTO srcCompanyProfileDTO){
+        if(srcCompanyProfileDTO.getCompanyName() != null)
+            destCompanyProfile.setCompanyName(srcCompanyProfileDTO.getCompanyName());
+        if(srcCompanyProfileDTO.getCompanySize() != null)
+            destCompanyProfile.setCompanySize(srcCompanyProfileDTO.getCompanySize());
+        if(srcCompanyProfileDTO.getOfficeAddress() != null)
+            destCompanyProfile.setOfficeAddress(srcCompanyProfileDTO.getOfficeAddress());
+        if (srcCompanyProfileDTO.getIndustryType() != null)
+            destCompanyProfile.setIndustryType(srcCompanyProfileDTO.getIndustryType());
+        if(srcCompanyProfileDTO.getCompanyPhoneNumber() != null)
+            destCompanyProfile.setCompanyPhoneNumber(srcCompanyProfileDTO.getCompanyPhoneNumber());
+        if(srcCompanyProfileDTO.getCompanyEmailAddress() != null)
+            destCompanyProfile.setCompanyEmailAddress(srcCompanyProfileDTO.getCompanyEmailAddress());
+
+        return destCompanyProfile;
     }
 }

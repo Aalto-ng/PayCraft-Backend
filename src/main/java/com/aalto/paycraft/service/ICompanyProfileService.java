@@ -10,6 +10,6 @@ public interface ICompanyProfileService {
     DefaultApiResponse<CompanyProfileDTO> createCompanyProfile(CompanyProfileDTO companyProfileDTO, UUID employerProfileId);
     DefaultApiResponse<CompanyProfileDTO> getCompanyProfile(UUID companyProfileId);
     DefaultApiResponse<List<CompanyProfileDTO>> getCompanies(UUID employerProfileId, Integer page, Integer pageSize);
-    DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID employerProfileId, CompanyProfileDTO companyProfileDTO);
+    DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID companyProfileId, CompanyProfileDTO companyProfileDTO);
     DefaultApiResponse<CompanyProfileDTO> deleteCompanyProfile(UUID employerProfileId);
 }
