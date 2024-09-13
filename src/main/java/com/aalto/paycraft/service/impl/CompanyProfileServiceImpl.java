@@ -19,32 +19,39 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class CompanyProfileServiceImpl implements ICompanyProfileService {
+    // Repositories for accessing employer and company profile data
     private final CompanyProfileRepository companyProfileRepository;
     private final EmployerProfileRepository employerProfileRepository;
 
     @Override
     public DefaultApiResponse<CompanyProfileDTO> createCompanyProfile(CompanyProfileDTO companyProfileDTO, UUID employerProfileId) {
         DefaultApiResponse<CompanyProfileDTO> response = new DefaultApiResponse<>();
-        EmployerProfile employerProfile;
-        EmployerProfileDTO employerProfileDTO;
 
+        // Ensure no duplicate company records under the same employer
         verifyRecord(companyProfileDTO, employerProfileId);
-        employerProfile = verifyAndFetchEmployerUUID(employerProfileId);
 
+        // Verify employer exists before proceeding
+        EmployerProfile employerProfile = verifyAndFetchEmployerUUID(employerProfileId);
+
+        // Map DTO to Entity and associate with employer
         CompanyProfile companyProfile = CompanyProfileMapper.mapToCompanyProfile(new CompanyProfile(), companyProfileDTO);
         companyProfile.setEmployerProfile(employerProfile);
+
+        // Persist the company profile in the database
         companyProfileRepository.save(companyProfile);
 
-        // Setting the dto to null to prevent the employers BVN from being returned
-        employerProfileDTO = EmployerProfileMapper.mapToEmployerProfileDTO(employerProfile, new EmployerProfileDTO());
+        // Prevent sensitive information (like BVN) from being returned
+        EmployerProfileDTO employerProfileDTO = EmployerProfileMapper.mapToEmployerProfileDTO(employerProfile, new EmployerProfileDTO());
         employerProfileDTO.setBvn(null);
 
+        // Response setup for successful creation
         response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
         response.setStatusMessage("Company Profile Created Successfully");
+
+        // Return essential company profile information in response
         response.setData(
                 CompanyProfileDTO.builder()
                         .companyProfileId(companyProfile.getCompanyProfileId())
@@ -63,16 +70,19 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
     @Override
     public DefaultApiResponse<CompanyProfileDTO> getCompanyProfile(UUID companyProfileId) {
         DefaultApiResponse<CompanyProfileDTO> response = new DefaultApiResponse<>();
-        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId).orElseThrow(()->
-                new RuntimeException("Invalid CompanyProfileId")
-        );
 
+        // Fetch company profile, throw exception if not found
+        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId)
+                .orElseThrow(() -> new RuntimeException("Invalid CompanyProfileId"));
+
+        // Map entity to DTO and populate the response
         CompanyProfileDTO companyProfileDTO = CompanyProfileMapper.mapToCompanyProfileDTO(companyProfile, new CompanyProfileDTO());
         companyProfileDTO.setCompanyProfileId(companyProfileId);
 
         response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
         response.setStatusMessage("Company Profile Information");
         response.setData(companyProfileDTO);
+
         return response;
     }
 
@@ -80,38 +90,48 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
     public DefaultApiResponse<List<CompanyProfileDTO>> getCompanies(UUID employerProfileId, Integer page, Integer pageSize) {
         DefaultApiResponse<List<CompanyProfileDTO>> response = new DefaultApiResponse<>();
 
-        if(!employerProfileRepository.existsById(employerProfileId))
+        // Validate employer profile existence
+        if (!employerProfileRepository.existsById(employerProfileId))
             throw new RuntimeException("Invalid employerProfileId");
 
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<CompanyProfile> companyProfileList = companyProfileRepository.findAllByEmployerProfile_EmployerProfileId(employerProfileId, pageable);
+        // Fetch paginated company profiles
+        List<CompanyProfile> companyProfileList = companyProfileRepository
+                .findAllByEmployerProfile_EmployerProfileId(employerProfileId, pageable);
 
-        List<CompanyProfileDTO> reponseList =  companyProfileList.stream()
-                .map(companyProfile ->
-                        CompanyProfileDTO.builder()
-                                .companyName(companyProfile.getCompanyName())
-                                .companyProfileId(companyProfile.getCompanyProfileId())
-                                .companySize(companyProfile.getCompanySize())
-                                .companyEmailAddress(companyProfile.getCompanyEmailAddress())
-                                .companyPhoneNumber(companyProfile.getCompanyPhoneNumber())
-                                .officeAddress(companyProfile.getOfficeAddress())
-                                .industryType(companyProfile.getIndustryType())
-                                .build()
+        // Map list of entities to DTOs
+        List<CompanyProfileDTO> responseList = companyProfileList.stream()
+                .map(companyProfile -> CompanyProfileDTO.builder()
+                        .companyName(companyProfile.getCompanyName())
+                        .companyProfileId(companyProfile.getCompanyProfileId())
+                        .companySize(companyProfile.getCompanySize())
+                        .companyEmailAddress(companyProfile.getCompanyEmailAddress())
+                        .companyPhoneNumber(companyProfile.getCompanyPhoneNumber())
+                        .officeAddress(companyProfile.getOfficeAddress())
+                        .industryType(companyProfile.getIndustryType())
+                        .build()
                 ).toList();
 
         response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
         response.setStatusMessage("List of Companies");
-        response.setData(reponseList);
+        response.setData(responseList);
+
         return response;
     }
 
     @Override
-    public DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID companyProfileId, CompanyProfileDTO companyProfileDTO) {
+    public DefaultApiResponse<CompanyProfileDTO> updateCompanyProfile(UUID companyProfileId, UUID employerProfileId, CompanyProfileDTO companyProfileDTO) {
         DefaultApiResponse<CompanyProfileDTO> response = new DefaultApiResponse<>();
-        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId).orElseThrow(
-                () -> new RuntimeException("Company Profile Not Found")
-        );
 
+        // Fetch the company profile and ensure it exists
+        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId)
+                .orElseThrow(() -> new RuntimeException("CompanyProfileId is invalid"));
+
+        // Check if employer profile matches the company profile's associated employer
+        if (!companyProfile.getEmployerProfile().getEmployerProfileId().equals(employerProfileId))
+            throw new RuntimeException("EmployerProfile doesn't match this CompanyProfileId");
+
+        // Update fields of the existing entity and save changes
         CompanyProfile updatedCompanyProfile = updateRecord(companyProfile, companyProfileDTO);
         companyProfileRepository.save(updatedCompanyProfile);
 
@@ -129,64 +149,72 @@ public class CompanyProfileServiceImpl implements ICompanyProfileService {
                         .build()
         );
 
-        //Implement the logic later. I'm tired AF
-        //Future David: Done
+        // Returning updated profile data
         return response;
     }
 
     @Override
-    public DefaultApiResponse<CompanyProfileDTO> deleteCompanyProfile(UUID employerProfileId) {
+    public DefaultApiResponse<CompanyProfileDTO> deleteCompanyProfile(UUID companyProfileId, UUID employerProfileId) {
         DefaultApiResponse<CompanyProfileDTO> response = new DefaultApiResponse<>();
-        CompanyProfile companyProfile = companyProfileRepository.findById(employerProfileId).orElseThrow(() ->
-                new RuntimeException("Invalid employerProfileId")
-        );
+
+        // Fetch the company profile and ensure it exists
+        CompanyProfile companyProfile = companyProfileRepository.findById(companyProfileId)
+                .orElseThrow(() -> new RuntimeException("Invalid companyProfileId"));
+
+        // Check that the employer profile is authorized to delete the company
+        if (!companyProfile.getEmployerProfile().getEmployerProfileId().equals(employerProfileId))
+            throw new RuntimeException("EmployerProfile doesn't match this CompanyProfileId");
+
+        // Delete the company profile from the database
         companyProfileRepository.delete(companyProfile);
 
         response.setStatusCode(PayCraftConstant.REQUEST_SUCCESS);
         response.setStatusMessage("Company successfully deleted");
+
+        // Return confirmation of the deleted profile
         response.setData(
                 CompanyProfileDTO.builder()
                         .companyProfileId(companyProfile.getCompanyProfileId())
                         .companyName(companyProfile.getCompanyName())
                         .companyEmailAddress(companyProfile.getCompanyEmailAddress())
-                        .companyProfileId(companyProfile.getCompanyProfileId())
                         .build()
         );
         return response;
     }
 
-
-    private EmployerProfile verifyAndFetchEmployerUUID(UUID employerProfileId){
+    private EmployerProfile verifyAndFetchEmployerUUID(UUID employerProfileId) {
+        // Fetch the employer profile from the database and throw an exception if not found
         Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
+        if (employerProfileOpt.isEmpty())
+            throw new RuntimeException("EmployerProfileID " + employerProfileId + " is invalid");
 
-        if(employerProfileOpt.isEmpty())
-            throw new RuntimeException("EmployerProfileID " + employerProfileId + "is invalid");
-        else
-            return employerProfileOpt.get();
+        return employerProfileOpt.get();
     }
 
-    private void verifyRecord(CompanyProfileDTO companyProfileDTO, UUID employerProfileId){
-        if(companyProfileRepository.findOneByCompanyEmailAddressAndCompanyPhoneNumberAndEmployerProfile_EmployerProfileId(
+    private void verifyRecord(CompanyProfileDTO companyProfileDTO, UUID employerProfileId) {
+        // Optimize performance by checking existence instead of fetching full record
+        if (companyProfileRepository.existsByCompanyEmailAddressAndCompanyPhoneNumberAndEmployerProfile_EmployerProfileId(
                 companyProfileDTO.getCompanyEmailAddress(),
                 companyProfileDTO.getCompanyPhoneNumber(),
                 employerProfileId
-        ).isPresent()){
+        )) {
             throw new RuntimeException("This company name already exists under this User");
         }
     }
 
-    private CompanyProfile updateRecord(CompanyProfile destCompanyProfile, CompanyProfileDTO srcCompanyProfileDTO){
-        if(srcCompanyProfileDTO.getCompanyName() != null)
+    private CompanyProfile updateRecord(CompanyProfile destCompanyProfile, CompanyProfileDTO srcCompanyProfileDTO) {
+        // Update only non-null fields to avoid overwriting existing valid data
+        if (srcCompanyProfileDTO.getCompanyName() != null)
             destCompanyProfile.setCompanyName(srcCompanyProfileDTO.getCompanyName());
-        if(srcCompanyProfileDTO.getCompanySize() != null)
+        if (srcCompanyProfileDTO.getCompanySize() != null)
             destCompanyProfile.setCompanySize(srcCompanyProfileDTO.getCompanySize());
-        if(srcCompanyProfileDTO.getOfficeAddress() != null)
+        if (srcCompanyProfileDTO.getOfficeAddress() != null)
             destCompanyProfile.setOfficeAddress(srcCompanyProfileDTO.getOfficeAddress());
         if (srcCompanyProfileDTO.getIndustryType() != null)
             destCompanyProfile.setIndustryType(srcCompanyProfileDTO.getIndustryType());
-        if(srcCompanyProfileDTO.getCompanyPhoneNumber() != null)
+        if (srcCompanyProfileDTO.getCompanyPhoneNumber() != null)
             destCompanyProfile.setCompanyPhoneNumber(srcCompanyProfileDTO.getCompanyPhoneNumber());
-        if(srcCompanyProfileDTO.getCompanyEmailAddress() != null)
+        if (srcCompanyProfileDTO.getCompanyEmailAddress() != null)
             destCompanyProfile.setCompanyEmailAddress(srcCompanyProfileDTO.getCompanyEmailAddress());
 
         return destCompanyProfile;

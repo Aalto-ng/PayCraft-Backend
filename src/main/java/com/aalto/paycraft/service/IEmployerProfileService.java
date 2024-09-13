@@ -11,6 +11,6 @@ public interface IEmployerProfileService {
     DefaultApiResponse<EmployerProfileDTO> createEmployerProfile(EmployerProfileDTO employerProfileDTO);
     DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerProfileId);
     DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerProfileId, EmployerProfileUpdateDTO employerProfileDTO);
-    DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerProfileId);
+    DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerProfileIdz);
     DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerProfileId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO);
 }

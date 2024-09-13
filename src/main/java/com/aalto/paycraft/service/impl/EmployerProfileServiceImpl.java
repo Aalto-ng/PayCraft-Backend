@@ -108,7 +108,6 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
             // Response only shows what was changed
             response.setData(
                     EmployerProfileDTO.builder()
-                            .employerProfileId(employerProfileId)
                             .firstName(employerProfileDTO.getFirstName())
                             .lastName(employerProfileDTO.getLastName())
                             .phoneNumber(employerProfileDTO.getPhoneNumber())
