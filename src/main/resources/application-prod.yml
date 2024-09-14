@@ -1,11 +1,11 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
   datasource:
-    url: jdbc:mysql://paycraft-dev-aalto.h.aivencloud.com:14641/${DATABASE_NAME:defaultdb}
+    url: jdbc:mysql://paycraft-prod-aaltoo.h.aivencloud.com:24416/${DATABASE_NAME:defaultdb}
     username: ${DATABASE_USERNAME}
-    password: ${DATABASE_DEV_PASSWORD}
+    password: ${DATABASE_PROD_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -16,15 +16,15 @@ spring:
         show_sql: true
 logging:
   file:
-    name: log/paycraft-service-dev.log
+    name: log/paycraft-service.log
   level:
     org:
       springframework:
         security: DEBUG
 
-secret-string: ${SECRET_STRING:PAYHFUKNSF09839FELIKS9348J39GHIUEWFJR9EF089WUJ4FNR9HG738UJW4WOLLSTONECRAFT}
+secret-string: ${SECRET_STRING}
 
 server:
-  port: 6020
+  port: 6090
   error:
     include-message: always
