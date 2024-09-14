@@ -13,7 +13,7 @@ CREATE TABLE EmployerProfile (
 CREATE TABLE CompanyProfile (
     companyProfileId INT AUTO_INCREMENT PRIMARY KEY,
     companyName VARCHAR(255) NOT NULL,
-    companySize ENUM("SMALL", "MEDIUM", "LARGE", "ENTERPRISE"),
+    companySize ENUM('SMALL', 'MEDIUM', 'LARGE', 'ENTERPRISE'),
     officeAddress VARCHAR(255) NOT NULL,
     industryType VARCHAR(100) NOT NULL,
     emailAddress VARCHAR(100) NOT NULL,

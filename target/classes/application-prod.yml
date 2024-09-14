@@ -1,0 +1,30 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://paycraft-prod-aaltoo.h.aivencloud.com:24416/${DATABASE_NAME:defaultdb}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PROD_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+logging:
+  file:
+    name: log/paycraft-service.log
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+secret-string: ${SECRET_STRING}
+
+server:
+  port: 6090
+  error:
+    include-message: always
