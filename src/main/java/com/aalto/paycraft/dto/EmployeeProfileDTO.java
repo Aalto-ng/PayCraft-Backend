@@ -1,5 +1,7 @@
-package com.aalto.paycraft.dto.enumeration;
+package com.aalto.paycraft.dto;
 
+import com.aalto.paycraft.dto.enumeration.EmploymentStatus;
+import com.aalto.paycraft.dto.enumeration.SalaryType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
@@ -12,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -54,6 +57,7 @@ public class EmployeeProfileDTO {
     @NotEmpty(message = "Bank account number cannot be null or empty")
     private String bankAccountNumber;
 
+    private Date dateOfBirth;
     private EmploymentStatus employmentStatus;
     private Instant endDate;
     private String department;
