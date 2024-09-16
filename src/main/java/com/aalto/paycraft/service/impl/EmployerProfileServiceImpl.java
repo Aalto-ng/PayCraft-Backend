@@ -16,12 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//import java.util.Objects;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.aalto.paycraft.constant.PayCraftConstant.ONBOARD_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +37,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         employerProfile.setPassword(passwordEncoder.encode(employerProfileDTO.getPassword()));
 
         // Save the employer profile
-        EmployerProfile savedEmployerProfile = employerProfileRepository.save(employerProfile);
-        response.setStatusMessage(ONBOARD_SUCCESS);
+        employerProfileRepository.save(employerProfile);
+
+        response.setStatusCode(PayCraftConstant.ONBOARD_SUCCESS);
         response.setStatusMessage("Employer Profile Created Successfully");
 
         // Build the response DTO with saved data
@@ -60,9 +58,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
     }
 
     @Override
-    public DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerId) {
+    public DefaultApiResponse<EmployerProfileDTO> getEmployerProfile(UUID employerProfileId) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -92,9 +90,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
 
     @Override
     @Transactional
-    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerId, EmployerProfileUpdateDTO employerProfileDTO) {
+    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfile(UUID employerProfileId, EmployerProfileUpdateDTO employerProfileDTO) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -127,9 +125,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
     }
 
     @Override
-    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerId) {
+    public DefaultApiResponse<EmployerProfileDTO> deleteEmployerProfile(UUID employerProfileId) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Check if the employer profile exists
         if(employerProfileOpt.isPresent()){
@@ -158,9 +156,9 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
 
     @Override
     @Transactional
-    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO) {
+    public DefaultApiResponse<EmployerProfileDTO> updateEmployerProfilePassword(UUID employerProfileId, EmployerProfilePasswordUpdateDTO employerProfilePasswordUpdateDTO) {
         DefaultApiResponse<EmployerProfileDTO> response = new DefaultApiResponse<>();
-        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerId);
+        Optional<EmployerProfile> employerProfileOpt = employerProfileRepository.findById(employerProfileId);
 
         // Validate that the new password is different from the old one
         if(Objects.equals(employerProfilePasswordUpdateDTO.getOldPassword(), employerProfilePasswordUpdateDTO.getNewPassword())) {
@@ -220,24 +218,24 @@ public class EmployerProfileServiceImpl implements IEmployerProfileService {
         }
     }
 
-    private EmployerProfile updateRecord(EmployerProfile destEmployerProfile, EmployerProfileUpdateDTO srcEmployerProfile) {
+    private EmployerProfile updateRecord(EmployerProfile destEmployerProfile, EmployerProfileUpdateDTO srcEmployerProfileDTO) {
         // Update all non-null fields
-        if(srcEmployerProfile.getFirstName() != null)
-            destEmployerProfile.setFirstName(srcEmployerProfile.getFirstName());
-        if(srcEmployerProfile.getLastName() != null)
-            destEmployerProfile.setLastName(srcEmployerProfile.getLastName());
-        if(srcEmployerProfile.getJobTitle() != null)
-            destEmployerProfile.setJobTitle(srcEmployerProfile.getJobTitle());
-        if(srcEmployerProfile.getEmailAddress() != null)
-            destEmployerProfile.setEmailAddress(srcEmployerProfile.getEmailAddress());
-        if(srcEmployerProfile.getPersonalAddress() != null)
-            destEmployerProfile.setPersonalAddress(srcEmployerProfile.getPersonalAddress());
-        if(srcEmployerProfile.getPhoneNumber() != null)
-            destEmployerProfile.setPhoneNumber(srcEmployerProfile.getPhoneNumber());
+        if(srcEmployerProfileDTO.getFirstName() != null)
+            destEmployerProfile.setFirstName(srcEmployerProfileDTO.getFirstName());
+        if(srcEmployerProfileDTO.getLastName() != null)
+            destEmployerProfile.setLastName(srcEmployerProfileDTO.getLastName());
+        if(srcEmployerProfileDTO.getJobTitle() != null)
+            destEmployerProfile.setJobTitle(srcEmployerProfileDTO.getJobTitle());
+        if(srcEmployerProfileDTO.getEmailAddress() != null)
+            destEmployerProfile.setEmailAddress(srcEmployerProfileDTO.getEmailAddress());
+        if(srcEmployerProfileDTO.getPersonalAddress() != null)
+            destEmployerProfile.setPersonalAddress(srcEmployerProfileDTO.getPersonalAddress());
+        if(srcEmployerProfileDTO.getPhoneNumber() != null)
+            destEmployerProfile.setPhoneNumber(srcEmployerProfileDTO.getPhoneNumber());
 
         // Update BVN if different
-        if(srcEmployerProfile.getBvn() != null && !Objects.equals(destEmployerProfile.getBvn(), srcEmployerProfile.getBvn())) {
-            destEmployerProfile.setBvn(srcEmployerProfile.getBvn());
+        if(srcEmployerProfileDTO.getBvn() != null && !Objects.equals(destEmployerProfile.getBvn(), srcEmployerProfileDTO.getBvn())) {
+            destEmployerProfile.setBvn(srcEmployerProfileDTO.getBvn());
         }
         return destEmployerProfile;
     }
